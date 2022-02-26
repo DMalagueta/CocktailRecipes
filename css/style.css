@@ -247,3 +247,12 @@ section.drinks article{
     cursor: pointer;
     align-items: center;
 }
+
+div.popupText{
+  width: 100%;
+  padding:0.7em;
+}
+
+div.popupText h1 {
+  text-align: center;
+}
