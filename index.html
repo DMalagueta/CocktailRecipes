@@ -10,9 +10,9 @@
 <body>
     
     <nav>
-        <h1>Cocktail</h1>
+        <h1 id="logo">Cocktail</h1>
         <input type="text" placeholder="search by name" id="filterByName">
-        <h3>My favorites</h3>
+        <h3 id="myFavouritesBtn">My favorites</h3>
         <ul>
             <h4>Filtros title</h4>
             <li>Filtros</li>
@@ -32,31 +32,7 @@
 
     <section id="main" class="main">
         <h1>Recipes</h1>
-        <article class="image">
-            <div class="slideshow-container">
-
-                <!-- Full-width images with number and caption text -->
-                <div class="slides fade">
-                  <img src="https://picsum.photos/200/200" style="width:100%">
-                  <div class="text">Caption Text</div>
-                </div>
-              
-                <div class="slides fade">
-                  <img src="https://picsum.photos/201/200" style="width:100%">
-                  <div class="text">Caption Two</div>
-                </div>
-              
-                <div class="slides fade">
-                  <img src="https://picsum.photos/202/200" style="width:100%">
-                  <div class="text">Caption Three</div>
-                </div>
-              
-                <!-- Next and previous buttons -->
-                <button class="prev" id="prev">&#10094;<button/>
-                <button class="next" id="next">&#10095;<button/>
-              </div>
-
-        </article>
+        
         <hr>
         <article class="popularDrinks">   
             <h1>Popular Drinks</h1>
@@ -71,7 +47,6 @@
                 <strong>Ingredient</strong>
             </p>
         </article>
-
     </section>
 
     <section class="searchFilters" id="searchFilters">
@@ -88,13 +63,16 @@
     <section class="drinks" id="drinkSearch">
     </section>
 
+    <section class="myFavourites" id="myFavourites">
+        <h1>My Favorites</h1>
+    </section>
+
     <div class="popup">
-        
         <article>
             <img id="imgPopup" src="" alt="">
             <div class="popupText">
                 <h1>nome cocktail</h1>
-                <h3>ingredients</h3>
+                <h3></h3>
                 <p>a</p>
             </div>
         </article>

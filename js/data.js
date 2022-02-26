@@ -28,11 +28,26 @@ export class Cocktail{
 }
 
 export let cocktails = [];
+export let myFavouritesFound = [];
 
 export let searchByName = (name) => {
     fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${name}`)
     .then (response => response.json())
     .then (data => {
         cocktails = data.drinks;
+    })
+}
+
+export let findById = (id) => {
+    fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`)
+    .then (response => response.json())
+    .then (data => {
+        data.drinks.map(c => {
+            myFavouritesFound.push({
+                strDrink: c.strDrink,
+                strAlcoholic: c.strAlcoholic,
+                strDrinkThumb: c.strDrinkThumb
+            })
+        })
     })
 }
