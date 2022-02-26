@@ -4,6 +4,7 @@ function init() {
 
     ///// VARIAVEIS
     let main = document.getElementById('main')
+    let grid = document.querySelector('.drinks');
 
     // PROCURA PELO INPUT
     let drinkSearch = document.getElementById('drinkSearch');
@@ -14,6 +15,7 @@ function init() {
     let popularDrink = document.getElementById('popularDrink');
     let popularDrinkText = document.querySelector('.popularDrinks p')
     let popularIngredient = document.getElementById('popularIngredient');
+    let popup = document.querySelector('.popup');
 
 
     // SLIDESHOW
@@ -23,7 +25,9 @@ function init() {
     let nextSlide = document.getElementById('next');
 
     ///// EVENTOS
-    searchInput.addEventListener('input',searchCocktailByName,false)
+    searchInput.addEventListener('input',searchCocktailByName,false);
+    grid.addEventListener('click', gridEvents,false);
+    popup.addEventListener('click', popupClose,false);
 
     prevSlide.addEventListener('click', moveToPrev, false);
     nextSlide.addEventListener('click', moveToNext, false);
@@ -31,6 +35,17 @@ function init() {
     ///// FUNCIONALIDADES
 
     // PROCURA PELO INPUT
+    function gridEvents(e) {
+        if (e.target.tagName === 'IMG'){
+            let img = e.target.dataset.img;
+            popup.classList.toggle('open');
+            document.getElementById('imgPopup').src = `${img}`;
+        }
+    }
+
+    function popupClose(){
+        popup.classList.toggle('open');
+    }
     function searchCocktailByName(e) {
 
         if(e.target.value === ''){
@@ -44,7 +59,6 @@ function init() {
             .then (data => {
                 cocktails = data.drinks;
                 showCocktailByName();
-                console.log(cocktails);
             })
             .catch (error => drinkSearch.innerHTML = `<h1>Drink ${e.target.value} not found</h1>`)
         }
@@ -55,13 +69,12 @@ function init() {
         drinkSearch.className = 'drinks';
         searchFilters.className = 'searchFilters';
         drinkSearch.innerHTML = ``;
-        console.log(cocktails);
         cocktails.map(c => {
             let {strDrink, strDrinkThumb, strAlcoholic} = c;
             drinkSearch.innerHTML += `
                 <article>
                     <h1>${strDrink}<h1/>
-                    <img width=200 src="${strDrinkThumb}">
+                    <img width=200 src="${strDrinkThumb}" data-img="${strDrinkThumb}">
                     <p>${strAlcoholic}</p>
                     <button>Recipe</button>
                 </article>

@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Ravi+Prakash&display=swap');
+
 *{
     margin: 0;
     padding: 0;
@@ -5,7 +7,7 @@
 }
 
 body {
-    font-family: "Helvetica Neue",Helvetica,Arial;
+    font-family: 'Ravi Prakash', cursive;
     display: flex;
     background-color:beige;
     flex-direction: column;
@@ -13,20 +15,19 @@ body {
 
 
 h1{
-    font-size:1.5em;
+    font-size:2em;
 }
 
 nav{
     position: fixed;
     top: 0;
     left: 0;
-    width: 20vw;
+    width: 15vw;
     height: 100vh;
     padding:0.5em;
     background-color:rgb(0, 0, 0);
     text-align: center;
     color:white;
-    z-index: 9;
     border-right: 3px solid transparent;
     border-image: linear-gradient(to bottom right, #b827fc 0%, #2c90fc 25%, #b8fd33 50%, #fec837 75%, #fd1892 100%);
     border-image-slice: 1;
@@ -38,15 +39,18 @@ nav ul{
 
 nav input{
     margin: 20px 0;
-    width:100%;
+    width:90%;
+    border:2px solid transparent;
+    border-image: linear-gradient(to bottom right, #b827fc 0%, #2c90fc 25%, #b8fd33 50%, #fec837 75%, #fd1892 100%);
+    border-image-slice: 1;
 }
 
 
 section.main{
     display: flex;
-    margin-left: 20vw;
+    margin-left: 15vw;
     flex-direction: column;
-    width: 80vw;
+    width: 85vw;
     padding: 0.5em;
     justify-content:space-between;
 }
@@ -90,9 +94,9 @@ section.drinks{
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap:3px;
-    margin-left:20vw;
+    margin-left:15vw;
     text-align: center;
-    width: 80vw;
+    width: 85vw;
 }
 
 section.drinks article{
@@ -208,3 +212,38 @@ section.drinks article{
     from {opacity: .4}
     to {opacity: 1}
   }
+
+  div.popup{
+    position: absolute;
+    background: rgba(0, 0, 0, 0.507);
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    display: none;
+    justify-content: center;
+    cursor: pointer;
+    position:fixed;
+}
+
+.popup article{
+  background-color: white;
+  margin-left: 15vw;
+  width:500px;
+  display: flex;
+  padding:0.5em;
+  
+  border:3px solid transparent;
+  border-image: linear-gradient(to bottom right, #b827fc 0%, #2c90fc 25%, #b8fd33 50%, #fec837 75%, #fd1892 100%);
+  border-image-slice: 1;
+}
+
+.popup article img{
+  max-width: 30vh;
+}
+
+.popup.open {
+    display:flex;
+    cursor: pointer;
+    align-items: center;
+}
