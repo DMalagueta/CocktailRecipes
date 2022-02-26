@@ -42,8 +42,10 @@ export let findById = (id) => {
     fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`)
     .then (response => response.json())
     .then (data => {
+        
         data.drinks.map(c => {
             myFavouritesFound.push({
+                idDrink: c.idDrink,
                 strDrink: c.strDrink,
                 strAlcoholic: c.strAlcoholic,
                 strDrinkThumb: c.strDrinkThumb
@@ -51,3 +53,5 @@ export let findById = (id) => {
         })
     })
 }
+
+export let whenFavouriteRemoved = () => {myFavouritesFound = []};

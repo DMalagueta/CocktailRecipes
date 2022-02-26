@@ -1,4 +1,4 @@
-import { Cocktail, searchByName, cocktails, findById, myFavouritesFound } from "./data.js";
+import { Cocktail, searchByName, cocktails, findById, myFavouritesFound,whenFavouriteRemoved } from "./data.js";
 
 
 document.addEventListener('DOMContentLoaded', init, false);
@@ -10,6 +10,7 @@ function init() {
     let main = document.getElementById('main');
     let nav = document.querySelector('nav');
     let grid = document.querySelector('.drinks');
+    let gridFavourites = document.querySelector('.myFavourites');
 
     let myFavourites = document.getElementById('myFavourites');
     myFavourites.className = 'hide';
@@ -25,14 +26,14 @@ function init() {
     let drinkSearch = document.getElementById('drinkSearch');
     let popup = document.querySelector('.popup');
 
-    let myFavouritesArray = [];
-
     ///// EVENTOS
     nav.addEventListener('input',navEvents, false);
     nav.addEventListener('click',navEvents, false);
     grid.addEventListener('click', gridEvents,false);
     popup.addEventListener('click', popupClose,false);
+    gridFavourites.addEventListener('click', myFavouritesEvents,false);
 
+    let myFavouritesArray = myFavouritesFound;
     
     ///// FUNCIONALIDADES
 
@@ -45,20 +46,7 @@ function init() {
         
         if(e.target.id === 'myFavouritesBtn'){
             if( myFavourites.className != 'myFavourites'){
-                    myFavourites.className = 'myFavourites';
-                    main.className= 'hide';
-                    drinkSearch.className='hide';
-                    
-                    myFavourites.innerHTML = '';
-                    myFavouritesFound.map( c => {
-                        myFavourites.innerHTML += `
-                            <article>
-                                <h1>${c.strDrink}<h1/>
-                                <img width=200 src="${c.strDrinkThumb}" data-img="${c.strDrinkThumb}">
-                                <p>${c.strAlcoholic}</p>
-                            </article>
-                        `;
-                    }) 
+                    showFavourites(myFavouritesArray);
             }
         }
 
@@ -83,8 +71,37 @@ function init() {
         }
     }
 
+    function myFavouritesEvents(e){
+        if (e.target.id === 'removeFavourite'){
+            
+            let newFavourites = myFavouritesArray.filter(c => e.target.dataset.id != c.idDrink);
+            
+            myFavouritesArray = newFavourites;
+            whenFavouriteRemoved();
+            showFavourites(myFavouritesArray);
+        }
+    }
+
+    function showFavourites(array){
+        myFavourites.className = 'myFavourites';
+        main.className= 'hide';
+        drinkSearch.className='hide';
+        
+        myFavourites.innerHTML = '';
+        array.map( c => {
+                 myFavourites.innerHTML += `
+                    <article>
+                         <h1>${c.strDrink}<h1/>
+                        <img width=200 src="${c.strDrinkThumb}" data-img="${c.strDrinkThumb}">
+                        <p>${c.strAlcoholic}</p>                                <button id='removeFavourite' data-id='${c.idDrink}'>Remove</button>
+                    </article>
+             `;
+        }) 
+    }
+
     function addToFavourites(id) {
             findById(id);
+            myFavouritesArray = myFavouritesFound;
     }
 
     function popupClose(){
