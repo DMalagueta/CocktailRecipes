@@ -12,13 +12,9 @@
     <nav>
         <h1 id="logo">Cocktail</h1>
         <input type="text" placeholder="search by name" id="filterByName">
-        <h3 id="myFavouritesBtn">My favorites</h3>
-        <ul>
-            <h4>Filtros title</h4>
-            <li>Filtros</li>
-            <li>Filtros</li>
-            <li>Filtros</li>
-            <li>Filtros</li>
+        <ul id='myDrinksMenu' >
+            <li id="myFavouritesBtn">Favorites</li>
+            <li>My recipes</li>
         </ul>
 
         <ul>
@@ -32,7 +28,25 @@
 
     <section id="main" class="main">
         <h1>Recipes</h1>
-        
+        <div class="slideshow-container">
+            <div class="mySlides" id="slide1">
+              
+            </div>
+          
+            <div class="mySlides" id="slide2">
+            </div>
+          
+            <div class="mySlides" id="slide3">
+            </div>
+          
+            <div class="mySlides" id="slide4">
+              
+            </div>
+          
+            <a class="prev">&#10094;</a>
+            <a class="next">&#10095;</a>
+          </div>
+          
         <hr>
         <article class="popularDrinks">   
             <h1>Popular Drinks</h1>
@@ -41,7 +55,7 @@
         </article>
         <hr>
         <article class="popularIngredient">   
-            <h1>Popular Ingredient</h1>
+            <h1>Most Favorited Drink</h1>
             <img src="https://picsum.photos/200/200" id="popularIngredient">
             <p> 
                 <strong>Ingredient</strong>
@@ -64,18 +78,15 @@
     </section>
 
     <section class="myFavourites" id="myFavourites">
-        <h1>My Favorites</h1>
     </section>
 
-    <div class="popup">
-        <article>
-            <img id="imgPopup" src="" alt="">
-            <div class="popupText">
-                <h1>nome cocktail</h1>
-                <h3></h3>
-                <p>a</p>
-            </div>
-        </article>
+    <section class="myRecipes" id="myRecipes">aaa</section>
+
+    <div class="popup" id="popup">
+    </div>
+
+    <div class="alert">
+        Added sucefully
     </div>
     <script src="js/index.js" type="module"></script>
 </body>

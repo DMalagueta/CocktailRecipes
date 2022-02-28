@@ -1,5 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Ravi+Prakash&display=swap');
 
+@import url('https://fonts.googleapis.com/css2?family=Freehand&display=swap');
+
 *{
     margin: 0;
     padding: 0;
@@ -24,7 +26,7 @@ nav{
     left: 0;
     width: 15vw;
     height: 100vh;
-    padding:0.5em;
+    padding-top: 0.5em;
     background-color:rgb(0, 0, 0);
     text-align: center;
     color:white;
@@ -32,7 +34,9 @@ nav{
     border-image: linear-gradient(to bottom right, #b827fc 0%, #2c90fc 25%, #b8fd33 50%, #fec837 75%, #fd1892 100%);
     border-image-slice: 1;
 }
-
+nav ul li:hover{
+  background-color:red;
+}
 nav ul{
     margin-top: 10px;
 }
@@ -120,6 +124,8 @@ section.drinks article{
     display:none;
 }
 
+
+/* POPUP STYLE */
 div.popup{
     position: absolute;
     background: rgba(0, 0, 0, 0.507);
@@ -134,19 +140,25 @@ div.popup{
 }
 
 .popup article{
-  background-color: white;
-  margin-left: 15vw;
-  width:500px;
+  background-image: url(../img/paper.jpeg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size:cover;
+  max-width: 90%;
+  max-height: 90%;
   display: flex;
-  padding:0.5em;
-  
+  padding:0.3em;
+  margin:0 auto;
+  text-align: center;
   border:3px solid transparent;
   border-image: linear-gradient(to bottom right, #b827fc 0%, #2c90fc 25%, #b8fd33 50%, #fec837 75%, #fd1892 100%);
   border-image-slice: 1;
 }
 
 .popup article img{
-  max-width: 30vh;
+  width:300px;
+  border:2px solid black;
+  border-radius:5px;
 }
 
 .popup.open {
@@ -160,22 +172,95 @@ div.popupText{
   padding:0.7em;
 }
 
-div.popupText h1 {
+div.popupText h1 , .popup h3{
   text-align: center;
 }
 
+div.popupText .first{
+  margin-top:15px;
+}
+
+div.popupText p{  
+  font-family: 'Freehand', cursive;
+  font-size: 1.2em;
+}
+
+/* MYFAVOURITES SECTION */
 section.myFavourites{
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap:3px;
   margin-left:15vw;
-  text-align: center;
   width: 85vw;
+  padding:0.7em;
 }
 
 section.myFavourites article{
-  display:flex;
+    display:flex;
     flex-direction: column;
     align-items:center;
     padding: .7em;
+    text-align: center;
+}
+
+/* SLIDESHOW */
+.slideshow-container {
+  position: relative;
+  margin: 0 auto;
+  
+}
+
+.slideshow-container img{
+  max-width: 500px;
+  border-radius:5%
+}
+.prev,
+.next {
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  top: 50%;
+  width: auto;
+  margin-top: -22px;
+  padding: 16px;
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  transition: 0.6s ease;
+  border-radius: 0 3px 3px 0;
+}
+
+.next {
+  right: 0;
+  border-radius: 3px 0 0 3px;
+}
+
+.prev:hover,
+.next:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.text {
+  color: #f2f2f2;
+  font-size: 15px;
+  padding: 8px 12px;
+  position: absolute;
+  bottom: 8px;
+  width: 100%;
+  text-align: center;
+}
+
+div.alert {
+  position:fixed;
+  top:1px;
+  right:1px;
+  padding: 20px;
+  background-color: green;
+  color: white;
+  border-radius:10px;
+}
+
+section.recipes{
+  display:flex;
+
 }
