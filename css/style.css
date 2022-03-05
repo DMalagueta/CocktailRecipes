@@ -15,7 +15,6 @@ body {
     flex-direction: column;
 }
 
-
 h1{
     font-size:2em;
 }
@@ -35,7 +34,7 @@ nav{
     border-image-slice: 1;
 }
 nav ul li:hover{
-  background-color:red;
+  background-color: rgb(189, 41, 181);
 }
 nav ul{
     margin-top: 10px;
@@ -144,7 +143,7 @@ div.popup{
   background-repeat: no-repeat;
   background-position: center;
   background-size:cover;
-  max-width: 90%;
+  max-width: 70%;
   max-height: 90%;
   display: flex;
   padding:0.3em;
@@ -156,7 +155,8 @@ div.popup{
 }
 
 .popup article img{
-  width:300px;
+  width:200px;
+  height:200px;
   border:2px solid black;
   border-radius:5px;
 }
@@ -260,7 +260,29 @@ div.alert {
   border-radius:10px;
 }
 
-section.recipes{
-  display:flex;
+section.myRecipes{
+  margin-left:15vw;
+  width:85vw;
+  padding: 0.5em;
+}
 
+div.recipes{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap:3px;
+    text-align: center;
+}
+
+div.recipes article {
+    display:flex;
+    flex-direction: column;
+    align-items:center;
+    padding: .7em;
+}
+
+.recipes img{
+  border: 3px solid transparent;
+  border-image: linear-gradient(to bottom right, #b827fc 0%, #2c90fc 25%, #b8fd33 50%, #fec837 75%, #fd1892 100%);
+  border-image-slice: 1;
+  height:200px;
 }

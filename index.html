@@ -10,27 +10,18 @@
 <body>
     
     <nav>
-        <h1 id="logo">Cocktail</h1>
+       <img src="./img/cocktaillogo.png" alt="" width="50" id="logo">
         <input type="text" placeholder="search by name" id="filterByName">
         <ul id='myDrinksMenu' >
+            <li id="myRecipesBtn">Home</li>
             <li id="myFavouritesBtn">Favorites</li>
-            <li>My recipes</li>
-        </ul>
-
-        <ul>
-            <h4>Filtros title</h4>
-            <li>Filtros</li>
-            <li>Filtros</li>
-            <li>Filtros</li>
-            <li>Filtros</li>
+            <li id="myRecipesBtn">My recipes</li>
         </ul>
     </nav>
 
     <section id="main" class="main">
-        <h1>Recipes</h1>
         <div class="slideshow-container">
             <div class="mySlides" id="slide1">
-              
             </div>
           
             <div class="mySlides" id="slide2">
@@ -40,14 +31,17 @@
             </div>
           
             <div class="mySlides" id="slide4">
-              
             </div>
-          
+
             <a class="prev">&#10094;</a>
             <a class="next">&#10095;</a>
           </div>
-          
         <hr>
+        <article>
+
+
+        </article>
+
         <article class="popularDrinks">   
             <h1>Popular Drinks</h1>
             <img src="https://picsum.photos/200/200" id="popularDrink">
@@ -80,7 +74,12 @@
     <section class="myFavourites" id="myFavourites">
     </section>
 
-    <section class="myRecipes" id="myRecipes">aaa</section>
+    <section class="myRecipes" id="myRecipes">
+        <h1>My Recipes</h1>
+        <button id="addNewRecipeBtn">Add Recipe</button>
+        <div class="recipes" id="gridMyRecipes">
+        </div>
+    </section>
 
     <div class="popup" id="popup">
     </div>

@@ -1,4 +1,6 @@
-import { Cocktail, searchByName, cocktails, findById, myFavouritesFound,whenFavouriteRemoved, popupItem, findPopupItem, randomDrink, randomDrinkArray} from "./data.js";
+import {searchByName, cocktails, findById, myFavouritesFound,whenFavouriteRemoved, popupItem, findPopupItem, randomDrink, randomDrinkArray} from "./data.js";
+
+import {myCocktailRecipes,Cocktail} from "./recipesData.js";
 
 
 document.addEventListener('DOMContentLoaded', init, false);
@@ -9,7 +11,8 @@ function init() {
     // GLOBAIS
     let main = document.getElementById('main');
     let nav = document.querySelector('nav');
-    let grid = document.querySelector('.drinks');
+    let grid = document.getElementById('drinkSearch');
+    let gridMyRecipes = document.getElementById('gridMyRecipes');
     
 
     let myFavourites = document.getElementById('myFavourites');
@@ -18,11 +21,8 @@ function init() {
 
     let myRecipes = document.getElementById('myRecipes');
     myRecipes.className = 'hide';
-
-
-    // PAGINA INICIAL
-    let popularDrink = document.getElementById('popularDrink');
-    let popularDrinkText = document.querySelector('.popularDrinks p');
+    let recipesDiv = document.getElementById('gridMyRecipes')
+    let addnNewRecipeBtn = document.getElementById('addNewRecipeBtn')
 
     // SLIDESHOW 
     let slideshow = document.querySelector('.slideshow-container');
@@ -49,15 +49,18 @@ function init() {
     nav.addEventListener('input',navEvents, false);
     nav.addEventListener('click',navEvents, false);
     grid.addEventListener('click', gridEvents,false);
-    popup.addEventListener('click', popupClose,false);
+    popup.addEventListener('click', popupEvents, false);
     gridFavourites.addEventListener('click', myFavouritesEvents,false);
     slideshow.addEventListener('click', slideshowEvents,false);
+    gridMyRecipes.addEventListener('click',gridMyRecipesEvents,false);
+    addnNewRecipeBtn.addEventListener('click',addRecipeBtn,false);
 
     let myFavouritesArray = myFavouritesFound;
     
     let alertDiv = document.querySelector('.alert');
     alertDiv.className = 'hide';
 
+    
     ///// FUNCIONALIDADES
 
     // NAVBAR
@@ -81,6 +84,16 @@ function init() {
         if (e.target.id === 'logo') {
             main.className='main';
             myFavourites.className = 'hide';
+            myRecipes.className = 'hide';
+        }
+
+        if (e.target.id === 'myRecipesBtn'){
+            main.className='hide';
+            myRecipes.className = 'myRecipes';
+            myFavourites.className = 'hide';
+            drinkSearch.className = 'hide';
+            searchFilters.className = 'hide';
+            showMyRecipes();
         }
     }
 
@@ -119,7 +132,8 @@ function init() {
         main.className= 'hide';
         drinkSearch.className='hide';
         searchFilters.className = 'hide';
-        
+        myRecipes.className = 'hide';
+
         myFavourites.innerHTML = '';
         array.map( c => {
                  myFavourites.innerHTML += `
@@ -143,12 +157,16 @@ function init() {
     function popupOpen(id) {
         popup.classList.toggle('open')
         findPopupItem(id)
-        
-
     }
 
-    function popupClose(){
-        popup.classList.toggle('open');
+    function popupEvents(e){
+        if(myRecipes.className !== 'myRecipes'){
+            popup.classList.toggle('open');
+        }
+        if(e.target.id === 'submitAddRecipeBtn'){
+            e.preventDefault();
+            submitNewRecipe();
+        }
     }
 
     // PROCURA PELO INPUT
@@ -171,6 +189,7 @@ function init() {
         drinkSearch.className   = 'drinks';
         searchFilters.className = 'searchFilters';
         drinkSearch.innerHTML   = ``;
+        myRecipes.className     = 'hide';
 
         if (cocktails != null) {
             cocktails.map(c => {
@@ -191,7 +210,136 @@ function init() {
         }
     }
 
+    // MINHAS RECEITAS
 
+    function showMyRecipes(){
+        recipesDiv.innerHTML = '';
+        myCocktailRecipes.map(r => {
+            let {strDrink, strDrinkThumb, strAlcoholic,idDrink} = r;
+            
+            recipesDiv.innerHTML += `
+            <article>
+                <h2>${strDrink}<h2/>
+                <img width=200 src="./../img/${strDrinkThumb}" data-id='${idDrink}'>
+                <p>${strAlcoholic}</p>
+                <button class='addToFavouritesBtn' id="editRecipeBtn" data-id='${idDrink}'>Edit</button>
+            </article>
+            `
+        })
+    }
+
+    function gridMyRecipesEvents(e){
+        if (e.target.id === 'editRecipeBtn'){
+            editRecipe(e.target.dataset.id);
+        }
+    }
+
+    function addRecipeBtn(e){
+        e.preventDefault();
+        popup.classList.toggle('open')
+        popup.innerHTML=`
+        <article>    
+        <div class="popupText">
+            <form id='addRecipeForm'>
+            <h1>Your Recipe</h1>
+                <div>
+                    <label for='addImg'>Img</label>
+                    <input type="text" id='addImg'>
+                </div>
+    
+                <div>
+                    <label for='addName'>Name</label>
+                    <input type="text" id='addName'>
+                </div>
+
+                <div>
+                    <label for='addAlcoholic'>Alcoholic</label>
+                    <input type="checkbox" id='addAlcoholic'>
+                </div>
+                <hr>
+    
+                <h3>Ingredients</h3>
+                <div>
+                    <label for='addIngredient1'>Ingredient 1</label>
+                    <input type="text" id='addIngredient1'>
+                </div>
+                
+                <div>
+                    <label for='addIngredient2'>Ingredient 2</label>
+                    <input type="text" id='addIngredient2'>
+                </div>
+    
+                <hr class='first'>
+                <h3>Instructions</h3>
+                <textarea id='addInstructions'></textarea>
+                
+                <p></p>
+                <hr>
+                <button id="submitAddRecipeBtn">Submit</button>
+            </form>
+        </div>
+    </article>
+        `;
+        /* let id = new Date().getTime();
+        let cocktail = new Cocktail  */
+
+    }
+
+    function submitNewRecipe(){
+        let id = new Date().getTime();
+        let formRecipe = document.querySelector('#addRecipeForm')
+        let addImg = document.querySelector('#addImg').value;
+        let addName = document.querySelector('#addName').value;
+        let addAlcoholic = document.querySelector('#addAlcoholic').checked;
+        let addIngredient1 = document.querySelector('#addIngredient1').value;
+        let addIngredient2 = document.querySelector('#addIngredient2').value;
+        let addInstructions = document.querySelector('#addInstructions').value;
+        
+
+        let cocktail = new Cocktail (
+            id,
+            addName,
+            'Alcoholic',
+            addInstructions,
+            addImg,
+            addIngredient1,
+            addIngredient2,
+        )
+
+        myCocktailRecipes.push(cocktail);
+        console.log(myCocktailRecipes)
+        formRecipe.reset();
+        popup.classList.toggle('open');
+        showMyRecipes();
+    }
+
+    function editRecipe(id){
+        console.log(id)
+        popup.classList.toggle('open');
+        let recipeToBeEdited = myCocktailRecipes.filter(c => c.idDrink == id);
+        recipeToBeEdited.map(c => {
+            popup.innerHTML = `
+                <article>    
+                    <div class="popupText">
+                        <img id="imgPopup" src="${c.strDrinkThumb}" alt=""> 
+                            <h1><input value='${c.strDrink}'></h1>
+                            <hr>
+                            <h3>Ingredients</h3>
+                            <p>${c.strIngredient1 == null ? '' : c.strIngredient1}</p>
+                            <p>${c.strIngredient2 == null ? '' : c.strIngredient2} </p>
+                            <p>${c.strIngredient3 == null ? '' : c.strIngredient3}</p>
+                            <p>${c.strIngredient4 == null ? '' : c.strIngredient4}</p>
+                            <hr class='first'>
+                            <h3>Instructions</h3>
+    
+                            <p>${c.strInstructions}</p>
+                            <hr>
+                            <button>Submit</button>
+                    </div>
+                </article>
+            `;
+        })
+    }   
 
     //slideshow
 
