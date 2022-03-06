@@ -1,4 +1,4 @@
-
+// CLASS PARA CRIAR NOVA RECEITA
 export class Cocktail{
     constructor(
         idDrink,
@@ -19,6 +19,7 @@ export class Cocktail{
     }
 }
 
+// ARRAY PARA MYRECIPES
 export let myCocktailRecipes = [
     {
         idDrink: 1,

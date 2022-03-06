@@ -1,4 +1,4 @@
-import {searchByName, cocktails, findById, myFavouritesFound,whenFavouriteRemoved, popupItem, findPopupItem, randomDrink, randomDrinkArray} from "./data.js";
+import {searchByName, cocktails, findById, myFavouritesFound,whenFavouriteRemoved, popupItem, findPopupItem, randomDrink, alcoholicDrinksData,nonAlcoholicDrinksData,alcoholicDrinksFetch, nonAlcoholicDrinksFetch} from "./data.js";
 
 import {myCocktailRecipes,Cocktail} from "./recipesData.js";
 
@@ -11,42 +11,52 @@ function init() {
     // GLOBAIS
     let main = document.getElementById('main');
     let nav = document.querySelector('nav');
+
+    // Drinksearch section
     let grid = document.getElementById('drinkSearch');
+    let searchFilters = document.getElementById('searchFilters');
+    searchFilters.className = 'hide';
+    let drinkSearch = document.getElementById('drinkSearch');
+
+    // MyRecipes section
     let gridMyRecipes = document.getElementById('gridMyRecipes');
-    
-    let cocktailByFilter = [];
-
-    let myFavourites = document.getElementById('myFavourites');
-    let gridFavourites = document.querySelector('.myFavourites');
-    myFavourites.className = 'hide';
-
-
     let myRecipesList = myCocktailRecipes;
     let myRecipes = document.getElementById('myRecipes');
     myRecipes.className = 'hide';
-    let recipesDiv = document.getElementById('gridMyRecipes')
     let addnNewRecipeBtn = document.getElementById('addNewRecipeBtn')
 
-    // SLIDESHOW 
-    let slideshow = document.querySelector('.slideshow-container');
-    let slide1 = document.getElementById('slide1');
-    let slide2 = document.getElementById('slide2');
-    let slide3 = document.getElementById('slide3');
-    let slide4 = document.getElementById('slide4');
+    // Alcoholic e nonAlcholic section
+    let alcoholicSection = document.getElementById('alcoholicSection');
+    let nonAlcoholicSection = document.getElementById('nonAlcoholicSection');
     
-    randomDrink(slide1);
-    randomDrink(slide2);
-    randomDrink(slide3);
-    randomDrink(slide4);
-        
-        
-    // PROCURA PELO INPUT
-    let searchFilters = document.getElementById('searchFilters');
-    searchFilters.className = 'hide';
+    // Array para filtros com/sem alcool na pesquisa por nome
+    let cocktailByFilter = [];
 
-    let drinkSearch = document.getElementById('drinkSearch');
+    // Favorites section
+    let myFavourites = document.getElementById('myFavourites');
+    let gridFavourites = document.querySelector('.myFavourites');
+    myFavourites.className = 'hide';
+    let myFavouritesArray = myFavouritesFound;
 
+    // GALERIA IMAGENS
+    let imgGalery =document.getElementById('imgGalery');
+    imgGalery.addEventListener('click', galeryEvents,false);
+    let imgRow = document.querySelector('.imgRow');
+    let expandedImg = document.getElementById('expandedImg');
+    expandedImg.src = './img/welcome.jpeg';
+
+        // IMAGENS RANDOM PARA A GALERIA
+        randomDrink(imgRow);
+        randomDrink(imgRow);
+        randomDrink(imgRow);
+        randomDrink(imgRow);
+    
+    // POPUP
     let popup = document.getElementById('popup');
+
+    // ADDED FAVORITE POPUP
+    let alertDiv = document.querySelector('.alert');
+    alertDiv.className = 'hide';
 
     ///// EVENTOS
     nav.addEventListener('input',navEvents, false);
@@ -54,25 +64,39 @@ function init() {
     grid.addEventListener('click', gridEvents,false);
     popup.addEventListener('click', popupEvents, false);
     gridFavourites.addEventListener('click', myFavouritesEvents,false);
-    slideshow.addEventListener('click', slideshowEvents,false);
     gridMyRecipes.addEventListener('click',gridMyRecipesEvents,false);
     addnNewRecipeBtn.addEventListener('click',addRecipeBtn,false);
     searchFilters.addEventListener('change', searchFiltersEvents,false);
+    alcoholicSection.addEventListener('click',alcoholicEvents,false);
+    nonAlcoholicSection.addEventListener('click',nonAlcoholicEvents,false)
 
-    let myFavouritesArray = myFavouritesFound;
-    
-    let alertDiv = document.querySelector('.alert');
-    alertDiv.className = 'hide';
+    // FETCH PARA A SECTION Alcoholic E NON ALCOHOLIC
+    alcoholicDrinksFetch();
+    nonAlcoholicDrinksFetch();
 
     
     ///// FUNCIONALIDADES
 
-    // NAVBAR
+    // EVENTOS GALERIA IMAGENS
+    function galeryEvents(e){
+
+        if(e.target.id != 'expandedImg'){
+            if(e.target.tagName == 'IMG'){
+                expandedImg.src = e.target.src;
+                expandedImg.parentElement.style.display="block";
+                document.getElementById('imgText').innerHTML=e.target.dataset.name
+            }
+    }
+    }
+
+    // EVENTOS NAVBAR
     function navEvents(e){  
         if (e.target.id === 'filterByName') {
             let input = e.target.value;
             myFavourites.className='hide';
-            searchFilters.className = 'hide'
+            searchFilters.className = 'hide';
+            alcoholicSection.className = 'hide';
+            nonAlcoholicSection.className = 'hide';
             searchCocktailByName(input);
         }
 
@@ -89,11 +113,15 @@ function init() {
             main.className='main';
             myFavourites.className = 'hide';
             myRecipes.className = 'hide';
+            alcoholicSection.className = 'hide';
+            nonAlcoholicSection.className = 'hide';
         }
         if (e.target.id === 'home') {
             main.className='main';
             myFavourites.className = 'hide';
             myRecipes.className = 'hide';
+            alcoholicSection.className = 'hide';
+            nonAlcoholicSection.className = 'hide';
         }
 
         if (e.target.id === 'myRecipesBtn'){
@@ -102,11 +130,33 @@ function init() {
             myFavourites.className = 'hide';
             drinkSearch.className = 'hide';
             searchFilters.className = 'hide';
+            alcoholicSection.className = 'hide';
+            nonAlcoholicSection.className = 'hide';
             showMyRecipes();
+        }
+        if (e.target.id === 'alcoholicDrinksBtn') {
+            alcoholicSection.className = 'alcoholicSection';
+            nonAlcoholicSection.className = 'hide';
+            main.className='hide';
+            myRecipes.className = 'hide';
+            myFavourites.className = 'hide';
+            drinkSearch.className = 'hide';
+            searchFilters.className = 'hide';
+            showAllAlcoholicDrinks(alcoholicDrinksData);
+        }
+        if (e.target.id === 'nonAlcoholicDrinksBtn') {
+            alcoholicSection.className = 'hide';
+            nonAlcoholicSection.className = 'nonAlcoholicSection';
+            main.className='hide';
+            myRecipes.className = 'hide';
+            myFavourites.className = 'hide';
+            drinkSearch.className = 'hide';
+            searchFilters.className = 'hide';
+            showAllNonAlcoholicDrinks(nonAlcoholicDrinksData);
         }
     }
 
-    // GRID DRINKS
+    // EVENTOS NA GRID DRINKSEARCH
     function gridEvents(e) {
         if (e.target.tagName === 'IMG'){
             let id= e.target.dataset.id;
@@ -121,6 +171,7 @@ function init() {
 
     }
 
+    // EVENTOS NOS FILTROS DA DRINKSEARCH
     function searchFiltersEvents(e){
         
         if(e.target.checked){ 
@@ -145,6 +196,8 @@ function init() {
             viewSearchInnerHtml(cocktailByFilter)
         }
     }
+
+    // EVENTOS NA SECTION FAVOURITES
     function myFavouritesEvents(e){
         if (e.target.id === 'removeFavourite'){
             
@@ -160,12 +213,15 @@ function init() {
         }
     }
 
+    // MOSTRAR FAVORITOS
     function showFavourites(array){
         myFavourites.className = 'myFavourites';
         main.className= 'hide';
         drinkSearch.className='hide';
         searchFilters.className = 'hide';
         myRecipes.className = 'hide';
+        alcoholicSection.className = 'hide';
+        nonAlcoholicSection.className = 'hide';
 
         myFavourites.innerHTML = '';
         array.map( c => {
@@ -179,6 +235,7 @@ function init() {
         }) 
     }
 
+    // ADICIONAR COCKTAIL AOS FAVORITOS
     function addToFavourites(id) {
             findById(id);
             myFavouritesArray = myFavouritesFound;
@@ -187,11 +244,13 @@ function init() {
             
     }
 
+    // POPUP INFORMAÇÃO DETALHADA COCKTAIL
     function popupOpen(id) {
         popup.classList.toggle('open')
         findPopupItem(id)
     }
 
+    // EVENTOS NA POPUP
     function popupEvents(e){
         if(myRecipes.className !== 'myRecipes'){
             popup.classList.toggle('open');
@@ -222,6 +281,7 @@ function init() {
         }
     }
 
+    // PROCURA DO COCKTAIL PELO NOME
     function showCocktailByName(input) {
         cocktailByFilter = cocktails;
         main.className          = 'hide';
@@ -239,6 +299,7 @@ function init() {
         }
     }
 
+    // MOSTRAR A PROCURA NO HTML
     function viewSearchInnerHtml(array){
         drinkSearch.innerHTML ='';
         array.map(c => {
@@ -254,14 +315,14 @@ function init() {
         })
     }
 
-    // MINHAS RECEITAS
+    // MOSTRAR MYRECIPES
 
     function showMyRecipes(){
-        recipesDiv.innerHTML = '';
+        gridMyRecipes.innerHTML = '';
         myRecipesList.map(r => {
             let {strDrink, strDrinkThumb, strAlcoholic,idDrink} = r;
             
-            recipesDiv.innerHTML += `
+            gridMyRecipes.innerHTML += `
             <article>
                 <h2>${strDrink}<h2/>
                 <img width=200 src="./../img/${strDrinkThumb}" data-id='${idDrink}'>
@@ -273,6 +334,7 @@ function init() {
         })
     }
 
+    // EVENTOS NA GRID DO MY RECIPES
     function gridMyRecipesEvents(e){
         if (e.target.id === 'editRecipeBtn'){
             editRecipe(e.target.dataset.id);
@@ -285,6 +347,7 @@ function init() {
         }
     }
 
+    // POPUP MYRECIPE
     function popupMyRecipeOpen(id){
         let popupCocktail = myRecipesList.filter(c=> c.idDrink == id);
         console.log(popupCocktail)
@@ -316,6 +379,7 @@ function init() {
        
     }
 
+    // ADICIONAR RECEITA
     function addRecipeBtn(e){
         e.preventDefault();
         popup.classList.toggle('open')
@@ -367,6 +431,7 @@ function init() {
 
     }
 
+    // ENVIAR DADOS PARA A ARRAY
     function submitNewRecipe(){
         let id = new Date().getTime();
         let formRecipe = document.querySelector('#addRecipeForm')
@@ -392,6 +457,7 @@ function init() {
                 showMyRecipes();
     }
 
+    // ENVIAR DADOS PARA INPUT PARA EDITAR
     function editRecipe(id){
         popup.classList.toggle('open');
         let recipeToBeEdited = myRecipesList.filter(c => c.idDrink == id);
@@ -442,6 +508,7 @@ function init() {
         })
     }   
 
+    // ATUALIZAR DADOS EDITADOS NA ARRAY
     function submitMyRecipeEdited(id){
         let editName = document.querySelector('#editName');
         let editInstructions = document.querySelector('#editInstructions');
@@ -473,38 +540,66 @@ function init() {
 
     }
 
+    // REMOVER RECEITA
     function removeRecipeFromMyRecipe(id){
         let filteredArray= myRecipesList.filter(c => c.idDrink != id)
         myRecipesList = filteredArray;
         showMyRecipes();
     }
-    //slideshow
 
-    let slideIndex = 1;
-    showSlides(slideIndex);
-
-    function slideshowEvents(e) {
-        if (e.target.className==='prev'){
-            plusSlides(-1);
-        }
-        if (e.target.className==='next'){
-            plusSlides(1);
-        }
-    }
-    
-    function plusSlides(n) {
-    showSlides(slideIndex += n);
-    }
-
-    function showSlides(n) {
-        let slides = document.getElementsByClassName("mySlides");
-        if (n > slides.length) {slideIndex = 1}
-        if (n < 1) {slideIndex = slides.length};
-        for (let i = 0; i < slides.length; i++) {
-            slides[i].style.display = "none";
-        }
+    // ALCOHOLIC DRINKS SECTION
+    function showAllAlcoholicDrinks(array){
+        let sliceArray= array.slice(0,20);
+        sliceArray.map(c => {
+            let {strDrink, strDrinkThumb, idDrink} = c;
+                alcoholicSection.innerHTML += `
+                    <article>
+                        <h1>${strDrink}<h1/>
+                        <img width=200 src="${strDrinkThumb}" data-id='${idDrink}'>
+                        <br>
+                        <button class='addToFavouritesBtn' data-id='${idDrink}'>add to favourites</button>
+                    </article>
+                `;
+            })
         
-        slides[slideIndex-1].style.display = "block";
     }
 
-}
+    // NON ALCOHOLIC DRINKS SECTION
+    function showAllNonAlcoholicDrinks(array){
+        let sliceArray= array.slice(0,20);
+        sliceArray.map(c => {
+            let {strDrink, strDrinkThumb, idDrink} = c;
+                nonAlcoholicSection.innerHTML += `
+                    <article>
+                        <h1>${strDrink}<h1/>
+                        <img width=200 src="${strDrinkThumb}" data-id='${idDrink}'>
+                        <br>
+                        <button class='addToFavouritesBtn' data-id='${idDrink}'>add to favourites</button>
+                    </article>
+                `;
+            })
+    }
+
+    // EVENTOS NA SECTION ALCOHOLIC DRINKS
+    function alcoholicEvents(e){
+        if (e.target.className == 'addToFavouritesBtn') {
+            addToFavourites(e.target.dataset.id);
+        }
+        if (e.target.tagName === 'IMG'){
+            let id= e.target.dataset.id;
+            popupOpen(id);
+        }
+    }
+
+    // EVENTOS NA SECTION NON ALCOHOLIC DRINKS
+    function nonAlcoholicEvents(e){
+        if (e.target.className == 'addToFavouritesBtn') {
+            addToFavourites(e.target.dataset.id);
+        }
+        if (e.target.tagName === 'IMG'){
+            let id= e.target.dataset.id;
+            popupOpen(id);
+        }
+    }
+} // FIM INIT
+    

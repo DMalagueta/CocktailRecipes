@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Ravi+Prakash&display=swap');
-
 @import url('https://fonts.googleapis.com/css2?family=Freehand&display=swap');
 
 *{
@@ -17,8 +16,9 @@ body {
 
 h1{
     font-size:2em;
+    text-align: center;
 }
-
+/* NAVBAR */
 nav{
     position: fixed;
     top: 0;
@@ -36,6 +36,9 @@ nav{
 nav ul li:hover{
   background-color: rgb(189, 41, 181);
 }
+nav ul li{
+  padding: 10px 0;
+}
 nav ul{
     margin-top: 10px;
 }
@@ -46,9 +49,31 @@ nav input{
     border:2px solid transparent;
     border-image: linear-gradient(to bottom right, #b827fc 0%, #2c90fc 25%, #b8fd33 50%, #fec837 75%, #fd1892 100%);
     border-image-slice: 1;
+    padding: 0.3em;
+}
+nav input::placeholder{
+  font-size:0.8em;
+  text-align: center;
+  
 }
 
+/* TODOS OS BUTOES */
+button{
+  background-color:black;
+  color:white;
+  padding:5px;
+  border:0;
+  border-radius:5px;
+  transition:.5s;
+  transform:scale(1);
+}
 
+button:hover{
+  background-color:rgb(189, 41, 181);
+  transform: scale(1.1);
+}
+
+/* MAIN SECTION */
 section.main{
     display: flex;
     margin-left: 15vw;
@@ -56,6 +81,7 @@ section.main{
     width: 85vw;
     padding: 0.5em;
     justify-content:space-between;
+    height:100vh;
 }
 
 .main article{
@@ -76,6 +102,7 @@ section.main{
     margin:0 auto;
 }
 
+/* FILTROS ALCOHOLIC/NON */
 section.searchFilters{
     margin-left: 20vw;
     margin: 0 auto;
@@ -93,6 +120,7 @@ section.searchFilters input{
     margin-right:20px;
 }
 
+/* GRID PROCURA DRINKS */
 section.drinks{
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -119,6 +147,7 @@ section.drinks article{
     font-size:0.7em;
 }
 
+/* HIDE GERAL */
 .hide{
     display:none;
 }
@@ -165,6 +194,7 @@ div.popup{
     display:flex;
     cursor: pointer;
     align-items: center;
+    transform: scale(1);
 }
 
 div.popupText{
@@ -203,53 +233,62 @@ section.myFavourites article{
     text-align: center;
 }
 
-/* SLIDESHOW */
-.slideshow-container {
-  position: relative;
-  margin: 0 auto;
-  
+/* GALERIA IMAGENS */
+div.imgColumn{
+  float:left;
+  width:25%;
+  padding:1em;
 }
 
-.slideshow-container img{
-  max-width: 500px;
-  border-radius:5%
-}
-.prev,
-.next {
-  cursor: pointer;
-  position: absolute;
-  top: 0;
-  top: 50%;
-  width: auto;
-  margin-top: -22px;
-  padding: 16px;
-  color: white;
-  font-weight: bold;
-  font-size: 18px;
-  transition: 0.6s ease;
-  border-radius: 0 3px 3px 0;
-}
-
-.next {
-  right: 0;
-  border-radius: 3px 0 0 3px;
-}
-
-.prev:hover,
-.next:hover {
-  background-color: rgba(0, 0, 0, 0.8);
-}
-
-.text {
-  color: #f2f2f2;
-  font-size: 15px;
-  padding: 8px 12px;
-  position: absolute;
-  bottom: 8px;
+div.imgColumn img{
+  opacity:0.8;
+  cursor:pointer;
   width: 100%;
-  text-align: center;
+  filter: grayscale(100%);
+  border: 2px solid transparent;
+  border-image: linear-gradient(to bottom right, #b827fc 0%, #2c90fc 25%, #b8fd33 50%, #fec837 75%, #fd1892 100%);
+  border-image-slice: 1;
 }
 
+.imgColumn img:hover{
+  filter: grayscale(0);
+}
+
+div.imgRow:after{
+  content:"";
+  display:table;
+  clear:both;
+}
+
+div.fullImgContainer{
+  position:relative;
+}
+
+div.fullImgContainer img{
+  width:400px;
+  border: 3px solid transparent;
+  border-image: linear-gradient(to bottom right, #b827fc 0%, #2c90fc 25%, #b8fd33 50%, #fec837 75%, #fd1892 100%);
+  border-image-slice: 1;
+  transition: all 700ms;
+}
+
+.fullImgContainer img:hover{
+    position:relative;
+    width:500px;
+    height:auto;
+    transition-timing-function:ease-out;
+}
+
+div.imgText{
+  text-align:center;
+  width:100%;
+  font-size:1.7em;
+  border-bottom: 2px solid transparent;
+  border-image: linear-gradient(to bottom right, #b827fc 0%, #2c90fc 25%, #b8fd33 50%, #fec837 75%, #fd1892 100%);
+  border-image-slice: 1;
+}
+
+/* POPUP QUANDO ADDED TO FAVOURITES */
 div.alert {
   position:fixed;
   top:1px;
@@ -260,6 +299,7 @@ div.alert {
   border-radius:10px;
 }
 
+/* MY RECIPES SECTION */
 section.myRecipes{
   margin-left:15vw;
   width:85vw;
@@ -285,4 +325,38 @@ div.recipes article {
   border-image: linear-gradient(to bottom right, #b827fc 0%, #2c90fc 25%, #b8fd33 50%, #fec837 75%, #fd1892 100%);
   border-image-slice: 1;
   height:200px;
+}
+
+/* ALCOHOLIC DRINKS SECTION */
+section.alcoholicSection{
+  margin-left:15vw;
+  width:85vw;
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap:3px;
+}
+
+section.alcoholicSection article{
+    display:flex;
+    flex-direction: column;
+    align-items:center;
+    padding: .7em;
+    text-align: center;
+}
+
+/* NONALCOHOLIC DRINKS SECTION */
+section.nonAlcoholicSection{
+  margin-left:15vw;
+  width:85vw;
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap:3px;
+}
+
+section.nonAlcoholicSection article{
+    display:flex;
+    flex-direction: column;
+    align-items:center;
+    padding: .7em;
+    text-align: center;
 }

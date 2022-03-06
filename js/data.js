@@ -2,7 +2,10 @@ export let cocktails = [];
 export let myFavouritesFound = [];
 export let randomDrinkArray = [];
 export let popupItem = [];
+export let alcoholicDrinksData = [];
+export let nonAlcoholicDrinksData = [];
 
+// FETCH PROCURA PELO NOME
 export let searchByName = (name) => {
     fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=${name}`)
     .then (response => response.json())
@@ -11,6 +14,7 @@ export let searchByName = (name) => {
     })
 }
 
+// FETCH PROCURA PELO ID PARA OS FAVORITOS
 export let findById = (id) => {
     fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`)
     .then (response => response.json())
@@ -28,23 +32,27 @@ export let findById = (id) => {
     })
 }
 
+// FUNCAO PARA ATUALIZAR ARRAY
 export let whenFavouriteRemoved = () => {myFavouritesFound = []};
 
+// FETCH PARA GALERIA DE IMAGENS
 export let randomDrink = (slide) => {
     
     fetch('https://www.thecocktaildb.com/api/json/v1/1/random.php')
     .then(response => response.json())
     .then(data =>{ 
         data.drinks.map(c =>{
-            slide.innerHTML = `
-                <img src="${c.strDrinkThumb}" style="width: 100%;">
-                <div class="text"><h1>${c.strDrink}</h1></div>
+            slide.innerHTML += `
+            <div class="imgColumn">
+                <img src="${c.strDrinkThumb}" data-name='${c.strDrink}'>
+            </div>
             `;
             })
         })
 
 }
 
+// FETCH PARA ENVIAR DADOS PARA A POPUP
 export let findPopupItem = (id) => {
     popup.innerHTML ='';
     fetch(`https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`)
@@ -79,4 +87,22 @@ export let findPopupItem = (id) => {
         
     })
 })
+}
+
+// FETCH PARA A SECTION ALCOHOLIC
+export let alcoholicDrinksFetch = () => {
+    fetch('https://www.thecocktaildb.com/api/json/v1/1/filter.php?a=Alcoholic')
+        .then(response => response.json())
+        .then(data => {
+            alcoholicDrinksData = data.drinks;
+        })
+}
+
+// FETCH PARA A SECTION NON ALCOHOLIC 
+export let nonAlcoholicDrinksFetch = () => {
+    fetch('https://www.thecocktaildb.com/api/json/v1/1/filter.php?a=Non_Alcoholic')
+    .then(response => response.json())
+    .then(data =>{
+        nonAlcoholicDrinksData = data.drinks;
+    })
 }

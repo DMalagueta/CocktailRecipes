@@ -8,7 +8,7 @@
     <title>Cocktail Recipes</title>
 </head>
 <body>
-    
+    <!-- NAVBAR -->
     <nav>
        <img src="./img/cocktaillogo.png" alt="" width="50" id="logo">
         <input type="text" placeholder="search by name" id="filterByName">
@@ -16,49 +16,27 @@
             <li id="home">Home</li>
             <li id="myFavouritesBtn">Favorites</li>
             <li id="myRecipesBtn">My recipes</li>
+            <li id="alcoholicDrinksBtn">Alcoholic</li>
+            <li id="nonAlcoholicDrinksBtn">Non-alcoholic</li>
         </ul>
     </nav>
 
+    <!-- HOME -->
     <section id="main" class="main">
-        <div class="slideshow-container">
-            <div class="mySlides" id="slide1">
+        <h1>Welcome to where the magic happens</h1>
+        <article id="imgGalery">
+            <div class="fullImgContainer">
+                <img id="expandedImg">
+                <div class='imgText' id="imgText">The Best Cocktail recipes</div>
             </div>
-          
-            <div class="mySlides" id="slide2">
-            </div>
-          
-            <div class="mySlides" id="slide3">
-            </div>
-          
-            <div class="mySlides" id="slide4">
+            <div class="imgRow">
             </div>
 
-            <a class="prev">&#10094;</a>
-            <a class="next">&#10095;</a>
-          </div>
-        <hr>
-        <article>
-
-
-        </article>
-
-        <article class="popularDrinks">   
-            <h1>Popular Drinks</h1>
-            <img src="https://picsum.photos/200/200" id="popularDrink">
-            <p>Drink</p>
-        </article>
-        <hr>
-        <article class="popularIngredient">   
-            <h1>Most Favorited Drink</h1>
-            <img src="https://picsum.photos/200/200" id="popularIngredient">
-            <p> 
-                <strong>Ingredient</strong>
-            </p>
         </article>
     </section>
 
+    <!-- FILTROS PARA A PROCURA PELO NOME -->
     <section class="searchFilters" id="searchFilters">
-            
         <div>
             <label for="alcoholic">Alcoholic</label>
             <input type="checkbox" name="" id="alcoholic">
@@ -69,12 +47,15 @@
         </div>
     </section>
 
+    <!-- GRID PARA MOSTRAR RESULTADOS DA PEQUISA -->
     <section class="drinks" id="drinkSearch">
     </section>
 
+    <!-- FAVORITOS  -->
     <section class="myFavourites" id="myFavourites">
     </section>
 
+    <!-- MY Recipes -->
     <section class="myRecipes" id="myRecipes">
         <h1>My Recipes</h1>
         <button id="addNewRecipeBtn">Add Recipe</button>
@@ -82,9 +63,17 @@
         </div>
     </section>
 
+    <!-- ALCOHOLIC DRINKS -->
+    <section id="alcoholicSection" class="alcoholicSection"></section>
+
+    <!-- NONALCOHOLIC DRINKS -->
+    <section id="nonAlcoholicSection"></section>
+
+    <!-- POPUP -->
     <div class="popup" id="popup">
     </div>
 
+    <!-- POPUP QUANDO ADICIONADO AOS FAVORITOS-->
     <div class="alert">
         Added sucefully
     </div>
