@@ -23,7 +23,7 @@ export let myCocktailRecipes = [
     {
         idDrink: 1,
         strDrink: "Pina Colada à la Diego",
-        strAlcoholic: "Alcoholic",
+        strAlcoholic: true,
         strInstructions: "Misturar tudo e voilá",
         strDrinkThumb: 'pinacolada.jpeg',
         strIngredient1: 'Absinto',

@@ -14,11 +14,14 @@ function init() {
     let grid = document.getElementById('drinkSearch');
     let gridMyRecipes = document.getElementById('gridMyRecipes');
     
+    let cocktailByFilter = [];
 
     let myFavourites = document.getElementById('myFavourites');
     let gridFavourites = document.querySelector('.myFavourites');
     myFavourites.className = 'hide';
 
+
+    let myRecipesList = myCocktailRecipes;
     let myRecipes = document.getElementById('myRecipes');
     myRecipes.className = 'hide';
     let recipesDiv = document.getElementById('gridMyRecipes')
@@ -54,6 +57,7 @@ function init() {
     slideshow.addEventListener('click', slideshowEvents,false);
     gridMyRecipes.addEventListener('click',gridMyRecipesEvents,false);
     addnNewRecipeBtn.addEventListener('click',addRecipeBtn,false);
+    searchFilters.addEventListener('change', searchFiltersEvents,false);
 
     let myFavouritesArray = myFavouritesFound;
     
@@ -86,6 +90,11 @@ function init() {
             myFavourites.className = 'hide';
             myRecipes.className = 'hide';
         }
+        if (e.target.id === 'home') {
+            main.className='main';
+            myFavourites.className = 'hide';
+            myRecipes.className = 'hide';
+        }
 
         if (e.target.id === 'myRecipesBtn'){
             main.className='hide';
@@ -112,6 +121,30 @@ function init() {
 
     }
 
+    function searchFiltersEvents(e){
+        
+        if(e.target.checked){ 
+            if(e.target.id === 'alcoholic'){
+                let alcoholicCocktail = cocktailByFilter.filter(c => c.strAlcoholic == 'Alcoholic')
+                if( alcoholicCocktail !== ''){
+                    viewSearchInnerHtml(alcoholicCocktail);
+                } else{
+                    viewSearchInnerHtml(cocktailByFilter);
+                }
+            }
+            if(e.target.id == 'nonAlcoholic'){
+                let nonAlcoholicCocktail = cocktailByFilter.filter(c => c.strAlcoholic == 'Non alcoholic')
+                if( nonAlcoholicCocktail === ''){
+                    
+                    viewSearchInnerHtml(cocktailByFilter);
+                } else{
+                    viewSearchInnerHtml(nonAlcoholicCocktail);
+                }
+            }
+        } else {
+            viewSearchInnerHtml(cocktailByFilter)
+        }
+    }
     function myFavouritesEvents(e){
         if (e.target.id === 'removeFavourite'){
             
@@ -167,6 +200,12 @@ function init() {
             e.preventDefault();
             submitNewRecipe();
         }
+        if(e.target.id == 'popup'){
+            popup.classList.remove('open');
+        }
+        if(e.target.id === 'submitMyRecipeEditedBtn'){
+            submitMyRecipeEdited(e.target.dataset.id);
+        }
     }
 
     // PROCURA PELO INPUT
@@ -184,7 +223,7 @@ function init() {
     }
 
     function showCocktailByName(input) {
-
+        cocktailByFilter = cocktails;
         main.className          = 'hide';
         drinkSearch.className   = 'drinks';
         searchFilters.className = 'searchFilters';
@@ -192,17 +231,7 @@ function init() {
         myRecipes.className     = 'hide';
 
         if (cocktails != null) {
-            cocktails.map(c => {
-                let {strDrink, strDrinkThumb, strAlcoholic,idDrink} = c;
-                drinkSearch.innerHTML += `
-                    <article>
-                        <h1>${strDrink}<h1/>
-                        <img width=200 src="${strDrinkThumb}" data-id='${idDrink}'>
-                        <p>${strAlcoholic}</p>
-                        <button class='addToFavouritesBtn' data-id='${idDrink}'>add to favourites</button>
-                    </article>
-                `;
-            })
+            viewSearchInnerHtml(cocktails);
         }
 
         if (cocktails === null) {
@@ -210,19 +239,35 @@ function init() {
         }
     }
 
+    function viewSearchInnerHtml(array){
+        drinkSearch.innerHTML ='';
+        array.map(c => {
+            let {strDrink, strDrinkThumb, strAlcoholic,idDrink} = c;
+            drinkSearch.innerHTML += `
+                <article>
+                    <h1>${strDrink}<h1/>
+                    <img width=200 src="${strDrinkThumb}" data-id='${idDrink}'>
+                    <p>${strAlcoholic}</p>
+                    <button class='addToFavouritesBtn' data-id='${idDrink}'>add to favourites</button>
+                </article>
+            `;
+        })
+    }
+
     // MINHAS RECEITAS
 
     function showMyRecipes(){
         recipesDiv.innerHTML = '';
-        myCocktailRecipes.map(r => {
+        myRecipesList.map(r => {
             let {strDrink, strDrinkThumb, strAlcoholic,idDrink} = r;
             
             recipesDiv.innerHTML += `
             <article>
                 <h2>${strDrink}<h2/>
                 <img width=200 src="./../img/${strDrinkThumb}" data-id='${idDrink}'>
-                <p>${strAlcoholic}</p>
-                <button class='addToFavouritesBtn' id="editRecipeBtn" data-id='${idDrink}'>Edit</button>
+                <p> ${strAlcoholic ? 'Alcoholic' : 'Non-Alcoholic'} </p>
+                <button class='addToFavouritesBtn' id="editRecipeBtn" data-id='${idDrink}'>Edit</button> 
+                <button id="removeRecipeBtn" data-id='${idDrink}'>Remove</button>
             </article>
             `
         })
@@ -232,6 +277,43 @@ function init() {
         if (e.target.id === 'editRecipeBtn'){
             editRecipe(e.target.dataset.id);
         }
+        if (e.target.id === 'removeRecipeBtn'){
+           removeRecipeFromMyRecipe(e.target.dataset.id);
+        }
+        if (e.target.tagName === 'IMG'){
+            popupMyRecipeOpen(e.target.dataset.id);
+        }
+    }
+
+    function popupMyRecipeOpen(id){
+        let popupCocktail = myRecipesList.filter(c=> c.idDrink == id);
+        console.log(popupCocktail)
+        popup.classList.toggle('open')
+        popupCocktail.map(c => {
+            popup.innerHTML = `
+            
+                <article>
+                    
+                    <div class="popupText">
+                    <img id="imgPopup" src="./img/${c.strDrinkThumb}" alt=""> 
+                        <h1>${c.strDrink}</h1>
+                        <hr>
+                        <h3>Ingredients</h3>
+                        <hr>
+                        
+                        <p>${c.strIngredient1 == null ? '' : c.strIngredient1}</p>
+                        <p>${c.strIngredient2 == null ? '' : c.strIngredient2} </p>
+
+                        <hr class='first'>
+                        <h3>Instructions</h3>
+                        <hr>
+
+                        <p>${c.strInstructions}</p>
+                    </div>
+                </article>
+            `;
+        })
+       
     }
 
     function addRecipeBtn(e){
@@ -295,52 +377,107 @@ function init() {
         let addIngredient2 = document.querySelector('#addIngredient2').value;
         let addInstructions = document.querySelector('#addInstructions').value;
         
-
-        let cocktail = new Cocktail (
-            id,
-            addName,
-            'Alcoholic',
-            addInstructions,
-            addImg,
-            addIngredient1,
-            addIngredient2,
-        )
-
-        myCocktailRecipes.push(cocktail);
-        console.log(myCocktailRecipes)
-        formRecipe.reset();
-        popup.classList.toggle('open');
-        showMyRecipes();
+            let cocktail = new Cocktail (
+                id,
+                addName,
+                addAlcoholic,
+                addInstructions,
+                addImg,
+                addIngredient1,
+                addIngredient2,
+                )
+                myRecipesList.push(cocktail);
+                formRecipe.reset();
+                popup.classList.toggle('open');
+                showMyRecipes();
     }
 
     function editRecipe(id){
-        console.log(id)
         popup.classList.toggle('open');
-        let recipeToBeEdited = myCocktailRecipes.filter(c => c.idDrink == id);
+        let recipeToBeEdited = myRecipesList.filter(c => c.idDrink == id);
         recipeToBeEdited.map(c => {
             popup.innerHTML = `
                 <article>    
                     <div class="popupText">
-                        <img id="imgPopup" src="${c.strDrinkThumb}" alt=""> 
-                            <h1><input value='${c.strDrink}'></h1>
-                            <hr>
-                            <h3>Ingredients</h3>
-                            <p>${c.strIngredient1 == null ? '' : c.strIngredient1}</p>
-                            <p>${c.strIngredient2 == null ? '' : c.strIngredient2} </p>
-                            <p>${c.strIngredient3 == null ? '' : c.strIngredient3}</p>
-                            <p>${c.strIngredient4 == null ? '' : c.strIngredient4}</p>
-                            <hr class='first'>
-                            <h3>Instructions</h3>
+                        <img id="imgPopup" src="./img/${c.strDrinkThumb}" alt=""> 
+                        <hr>
+                        <div>
+                            <label for='editName'>Name</label>
+                            <input type='text' value='${c.strDrink}' id='editName'>
+                        </div>
+                        <div>
+                            <label for='editImg'>Img</label>
+                            <input type='text' id='editImg' value='${c.strDrinkThumb}'>
+                        </div>
+                        <div>
+                            <label for='editAlcoholic'>Alcoholic</label>
+                            <input type='checkbox' id='editAlcoholic' ${c.strAlcoholic ? 'checked' : ''}>
+                        </div>
+
+                        <h3>Ingredients</h3>
+
+                        <div>
+                            <label for="editIngredient1">
+                            <input value='${c.strIngredient1}' id='editIngredient1'>
+                        <div/>
+
+                        <div>
+                            <label for="editIngredient2">
+                            <input value='${c.strIngredient2}' id='editIngredient2'>
+                        <div/>
+                        <hr class='first'>
+
+                        <h3>Instructions</h3>
     
-                            <p>${c.strInstructions}</p>
-                            <hr>
-                            <button>Submit</button>
+                        <div>
+                            <label for="editInstructions">
+                            <textarea id='editInstructions'>${c.strInstructions}</textarea>
+                        <div/>
+                        <hr>
+
+                        <button id='submitMyRecipeEditedBtn' data-id='${c.idDrink}'>Submit</button>
                     </div>
                 </article>
             `;
         })
     }   
 
+    function submitMyRecipeEdited(id){
+        let editName = document.querySelector('#editName');
+        let editInstructions = document.querySelector('#editInstructions');
+        let editAlcoholic = document.querySelector('#editAlcoholic');
+        let editImg = document.querySelector('#editImg');
+        let editIngredient1 = document.querySelector('#editIngredient1');
+        let editIngredient2 = document.querySelector('#editIngredient2');
+        let updatedRecipe = myRecipesList.map(c => {
+            if(c.idDrink == id){
+                return {
+                    ...c,
+                    strDrink: editName.value,
+                    strAlcoholic: editAlcoholic.checked,
+                    strInstructions: editInstructions.value,
+                    strDrinkThumb: editImg.value,
+                    strIngredient1: editIngredient1.value,
+                    strIngredient2: editIngredient2.value,
+                }
+            }
+            else{
+                return c;
+            }
+        })
+        console.log(updatedRecipe);
+        myRecipesList = updatedRecipe;
+        showMyRecipes();
+        popup.classList.toggle('open');
+        
+
+    }
+
+    function removeRecipeFromMyRecipe(id){
+        let filteredArray= myRecipesList.filter(c => c.idDrink != id)
+        myRecipesList = filteredArray;
+        showMyRecipes();
+    }
     //slideshow
 
     let slideIndex = 1;
